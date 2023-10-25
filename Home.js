@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {
-  SafeAreaView,
-  View,
-  FlatList,
-  StyleSheet,
-  Image,
-  Button
-  }
-   from 'react-native';
+import { SafeAreaView, View, FlatList, StyleSheet, Image, Button, Text } from 'react-native';
 import axios from 'axios';
+
 
 const Home = ({navigation}) =>
 {
@@ -16,7 +9,7 @@ const [bebe, setBebe] = useState('');
 
     return(
     <View style={{display: "flex", alignItems: "center"}}>
-    <h1>HARDWARE</h1>
+    <Text>HARDWARE</Text>
     <Image style={styles.image} source = {require("./assets/logo.png")}/>
 
     <Button
@@ -26,7 +19,10 @@ const [bebe, setBebe] = useState('');
             }
           
     />
-    <br></br>
+
+    <Text>
+
+    </Text>
 
     <Button
             title="HORA Y TEMPERATURA"
@@ -35,7 +31,10 @@ const [bebe, setBebe] = useState('');
             }
           
     />
-    <br></br>
+    
+    <Text>
+
+    </Text>
 
     <Button
             title="EMERGENCIAS"
