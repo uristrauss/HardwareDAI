@@ -44,6 +44,14 @@ const [bebe, setBebe] = useState('');
           
     />
 
+<Button
+            title="ABOUT"
+            onPress={() =>
+            navigation.navigate('About')
+            }
+          
+    />
+
     </View>
 
     )
