@@ -1,11 +1,11 @@
-import React, { useState, useEffect} from 'react';
-import { Text, View, StyleSheet, Button,Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, StyleSheet, Button, Image } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
-const About = () =>
-{
-    const [tienePermiso, setTienePermiso] = useState(null);
+const About = () => {
+  const [tienePermiso, setTienePermiso] = useState(null);
   const [escaneado, setEscaneado] = useState(false);
+  const [abrirScanner, setAbrirScanner] = useState(false);
 
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -18,75 +18,60 @@ const About = () =>
 
   const handleBarCodeScanned = ({ type, data }) => {
     setEscaneado(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    alert(data);
+  };
+
+  const escanear = () => {
+    setEscaneado(false);
+    setAbrirScanner(true);
+  };
+
+  const escanearAGAIN = () => {
+    setEscaneado(false);
+    setAbrirScanner(false);
   };
 
   if (tienePermiso === null) {
-    return <Text>Requesting for camera permission</Text>;
+    return <Text>Pidiendo permiso para la cámara</Text>;
   }
   if (tienePermiso === false) {
-    return <Text>No access to camera</Text>;
+    return <Text>No tienes acceso a la cámara</Text>;
   }
 
-    return(
-<View>
-        <Image style={styles.image} source = {require("./assets/QR.png")}/>   
-        
+  if (!abrirScanner) {
+    return (
       <View style={styles.container}>
-        <BarCodeScanner
-          onBarCodeScanned={escaneado ? undefined : handleBarCodeScanned}
-          style={StyleSheet.absoluteFillObject}
-        />
-        {escaneado && <Button title={'Tap to Scan Again'} onPress={() => setEscaneado(false)} />}
+        <Image style={styles.image} source={require('./assets/QR.png')} />
+        <Button title={'Escanear'} onPress={escanear} />
       </View>
-     
-   
-</View>
-     )
-}
+    );
+  }
+
+  return (
+    <View style={styles.container}>
+      <BarCodeScanner
+        onBarCodeScanned={escaneado ? undefined : handleBarCodeScanned}
+        style={StyleSheet.absoluteFillObject}
+      />
+      {escaneado && (
+        <Button title={'Volver'} onPress={escanearAGAIN} />
+      )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-     },
-     image :{
-      marginBottom: 40,
-      height: 200,
-      width: 200
-    },
-    inputView: {
-        backgroundColor: "#FFF44A",
-        borderRadius: 30,
-        width: "40%",
-        height: 45,
-        marginBottom: 20,
-        alignItems: "center",
-      },
-      TextInput: {
-        height: 50,
-        flex: 1,
-        padding: 10,
-        marginLeft: 20,
-      },
-      forgot_button: {
-        height: 30,
-        marginBottom: 30,
-      },
-      loginBtn:
-      {
-        width:"80%",
-        borderRadius:25,
-        height:50,
-        alignItems:"center",
-        justifyContent:"center",
-        marginTop:40,
-        backgroundColor:"#B3A701",
-      }
-      
-  });
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    marginBottom: 40,
+    height: 200,
+    width: 200,
+  },
+});
 
 export default About;
