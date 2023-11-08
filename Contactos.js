@@ -43,7 +43,7 @@ const Contactos = () =>
             <View style={styles.contactItem}>
                 <Text style={styles.name}>Nombre: {item.firstName}</Text>
                 <Text style={styles.name}>Apellido: {item.lastName}</Text>
-                <Text style={styles.phoneNumberTitle}>Phone Numbers:</Text>
+                <Text style={styles.phoneNumberTitle}>Numeros de telefono:</Text>
                 {item.phoneNumbers.map((phoneNumber, index) => (
                     <Text key={index} style={styles.phoneNumber}>{phoneNumber.number}</Text>
                 ))}

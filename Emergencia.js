@@ -1,62 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Accelerometer } from 'expo-sensors';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TextInput } from 'react-native-gesture-handler';
+import { Button } from 'react-native-web';
+
 
   const Emergencia = () =>{
+    const [numero, setNumero] = useState(549);
 
-    const [{ x, y, z }, setData] = useState({
-      x: 0,
-      y: 0,
-      z: 0,
-    });
-    const [subscription, setSubscription] = useState(null);
-  
-    const _slow = () => Accelerometer.setUpdateInterval(1000);
-    const _fast = () => Accelerometer.setUpdateInterval(16);
-  
-    const _subscribe = () => {
-      setSubscription(Accelerometer.addListener(setData));
+   
+    const numeroEmergencia = () => {
+      if(validar(numero)){
+        console.log(numero);
+        AsyncStorage.setItem('numeroEmergencia', Number(numero))
+      }
+      else{
+      console.log("NO SE GUARDO");
+      };
     };
-  
-    const _unsubscribe = () => {
-      subscription && subscription.remove();
-      setSubscription(null);
-    };
-  
-    useEffect(() => {
-      _subscribe();
-      return () => _unsubscribe();
-    }, []);
 
+    const validar = () => {
+      const validacion = /^(?:(?:00)?549?)?0?(?:11|[2368]\d)(?:(?=\d{0,2}15)\d{2})??\d{8}$/;
+      return validacion.test(numero);
+    }
+    
     return (
-      <View style={styles.container}>
-        <Text style={styles.text}>Accelerometer: (in gs where 1g = 9.81 m/s^2)</Text>
-        <Text style={styles.text}>x: {x}</Text>
-        <Text style={styles.text}>y: {y}</Text>
-        <Text style={styles.text}>z: {z}</Text>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={subscription ? _unsubscribe : _subscribe} style={styles.button}>
-            <Text>{subscription ? 'On' : 'Off'}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={_slow} style={[styles.button, styles.middleButton]}>
-            <Text>Slow</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={_fast} style={styles.button}>
-            <Text>Fast</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+    <View>
+    <TextInput
+    placeholder="Manda tu numero de EMERGENCIA"
+    onChangeText={text => setNumero(text)}
+    value={numero}
+    />
+    <Button title="Mandar NUMERO" onPress={numeroEmergencia} />
+    </View>
+
     );
 
 
-  }
+  };
+
+ 
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#fff', // Set your desired background color
+      backgroundColor: '#fff', 
     },
     text: {
       fontSize: 18,
@@ -75,7 +65,7 @@ import { Accelerometer } from 'expo-sensors';
       borderRadius: 5,
     },
     middleButton: {
-      backgroundColor: '#AAAAAA', // Change the color of the middle button
+      backgroundColor: '#AAAAAA', 
     },
   });
 
