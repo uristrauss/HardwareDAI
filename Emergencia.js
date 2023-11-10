@@ -1,20 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View, Button, TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { TextInput } from 'react-native-gesture-handler';
-import { Button } from 'react-native-web';
 
 
   const Emergencia = () =>{
-    const [numero, setNumero] = useState(549);
+    const [numero, setNumero] = useState(54911);
+    const [numeroValido, setNumeroValido] = useState();
+    const [numeroGuardado, setNumeroGuardado] = useState();
 
-   
+    const cargarNumero = async () => {
+      const numeroGuardado = await AsyncStorage.getItem('numeroEmergencia');
+      if(numeroGuardado) {
+        setNumeroValido(numeroGuardado);
+      }
+    }
+
+    useEffect(() =>{
+      cargarNumero();
+     },[])
+    
     const numeroEmergencia = () => {
       if(validar(numero)){
-        console.log(numero);
-        AsyncStorage.setItem('numeroEmergencia', Number(numero))
+        AsyncStorage.setItem('numeroEmergencia', numero.toString())
+        console.log("El numero es " + numero);
+        Alert.alert("El numero es " + numero);
+        setNumeroValido(numero);
       }
       else{
+      Alert.alert("Numero ingresado no valido");
       console.log("NO SE GUARDO");
       };
     };
@@ -26,12 +39,15 @@ import { Button } from 'react-native-web';
     
     return (
     <View>
+      <Text>Número de Emergencia</Text>
     <TextInput
-    placeholder="Manda tu numero de EMERGENCIA"
+    placeholder="54911********"
     onChangeText={text => setNumero(text)}
     value={numero}
     />
+    <Text>Formato de número: 54911********</Text>
     <Button title="Mandar NUMERO" onPress={numeroEmergencia} />
+    <Text>El numero de emergencia guardado es: {numeroValido}</Text>
     </View>
 
     );
